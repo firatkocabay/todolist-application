@@ -1,0 +1,30 @@
+.table-sortable tbody tr {
+    cursor: move;
+}
+
+.bg-light {
+    background-color: #e4e8ec!important;
+}
+
+li.nav-item {
+    padding: 8px;
+}
+
+a.btn.btn-outline-primary {
+    margin-left: 15px;
+}
+
+input#emailLogin {
+    margin-bottom: 20px !important;
+}
+
+.checkbox.mb-3 {
+    margin-top: 2%;
+}
+
+.special-area {
+	border: 1px dotted #a1a1a1;
+    padding: 1%;
+    border-radius: 13px;
+    margin: 2% 0px;
+}

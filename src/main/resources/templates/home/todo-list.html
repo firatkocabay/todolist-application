@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://code.jquery.com/jquery-latest.min.js"></script>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script
+	src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></script>
+<link th:href="@{/public/style.css}" type="text/css" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://fonts.googleapis.com/css?family=Roboto:500,700" />
+<script type="text/javascript" th:src="@{/public/app.js}"></script>
+
+<title>Home - TO-DO List Application</title>
+</head>
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="#">TO-DO Application</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarSupportedContent"
+			aria-controls="navbarSupportedContent" aria-expanded="false"
+			aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active"><a href="/home/todo-list"
+					class="nav-link">Home</a> <span class="sr-only">(current)</span></li>
+				<li class="nav-item"><a href=""
+					class="btn btn-success my-1 my-lg-0" data-toggle="modal"
+					data-target="#modalCreateToDoList">Create TO-DO List</a>
+				<li>
+				<li class="nav-item"><a href=""
+					class="btn btn-outline-success my-1 my-lg-0"
+					th:disabled="${toDoList == null}" data-toggle="modal"
+					data-target="#modalCreateToDoListItem">Add Item </a></li>
+			</ul>
+			<h4>Welcome, <span th:text="${userName}"></span></h4>
+			<a class="btn btn-outline-primary" href="/login?logout"><i class="fa fa-external-link"></i></a>
+		</div>
+	</nav>
+
+	<div class="container" th:if="${toDoList != null}">
+		<div class="row clearfix">
+			<th:block th:each="oneToDoList: ${toDoList}">
+				<div class="col-md-6 table-responsive special-area" th:id="${oneToDoList.id}">
+					<table class="table table-bordered table-hover table-sortable"
+						id="tab_logic">
+						<thead>
+							<tr>
+								<h3 th:text="${oneToDoList.name}">
+									</h1>
+							</tr>
+							<tr>
+								<th class="text-center">Name</th>
+								<th class="text-center">Deadline</th>
+								<th class="text-center">Description</th>
+								<th class="text-center">Status</th>
+								<th class="text-center"
+									style="border-top: 1px solid #ffffff; border-right: 1px solid #ffffff;">
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<span th:if="${oneToDoList.toDoItems != null}"> <th:block
+									th:each="toDoItem: ${oneToDoList.toDoItems}">
+									<tr th:id="${toDoItem.id}" th:data-id="${toDoItem.id}"
+										class="hidden">
+										<td data-name="name"><span th:text="${toDoItem.name}"></span>
+										</td>
+										<td data-name="deadline"><span
+											th:text="${#strings.substring(toDoItem.deadline,0,10)}"></span>
+										</td>
+										<td data-name="description">
+											<p th:text="${toDoItem?.description}"></p>
+										</td>
+										<td data-name="status">
+											<div class="custom-control custom-switch">
+												<input type="checkbox" class="custom-control-input"
+													th:id="${toDoItem.name} + ${toDoItem.id}"
+													th:checked="${toDoItem.isDone}"> <label
+													class="custom-control-label"
+													th:for="${toDoItem.name} + ${toDoItem.id}">Done</label>
+											</div>
+										</td>
+										<td data-name="del">
+<!-- 										<form action="#" th:method="delete" th:action="@{/todo-item/delete/' + '${toDoItem.id}}" > -->
+											<a name="del0" th:href="@{'/todo-item/delete/' + ${toDoItem.id}}"
+												class='btn btn-danger glyphicon glyphicon-remove row-remove'>
+												<span aria-hidden="true">×</span>
+											</a>
+<!-- 										</form> -->
+										</td>
+									</tr>
+								</th:block>
+							</span>
+						</tbody>
+					</table>
+					<button class="btn btn-danger" type="submit" data-toggle="modal" onclick="linkClickEvent(this);"
+						data-target="#deleteConfirmationModal">Delete List</button>
+				</div>
+			</th:block>
+		</div>
+	</div>
+
+	<div id="modalCreateToDoList" class="modal fade">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">Create TO-DO List</h3>
+				</div>
+				<div class="modal-body">
+					<form action="#" method="POST" th:action="@{/home/todo-list}"
+						th:object="${toDoList}">
+						<div class="form-group">
+							<label class="control-label">Subject</label>
+							<!-- <div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"></div> -->
+							<div>
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<input type="text" class="form-control" id="name" name="name"
+										placeholder="To Do List Name" required autofocus />
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div>
+								<button type="submit" class="btn btn-success">Create</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<div id="modalCreateToDoListItem" class="modal fade">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3 class="modal-title">Create TO-DO List Item</h3>
+				</div>
+				<div class="modal-body">
+					<form action="#" method="POST" th:action="@{/todo-item/create}"
+						th:object="${toDoItem}">
+						<div class="form-group">
+							<label class="control-label">Name</label>
+							<!-- <div class="alert alert-success" role="alert" th:if="${msg}" th:utext="${msg}"></div> -->
+							<div>
+								<div class="input-group mb-4 mr-sm-4 mb-sm-2">
+									<input type="text" class="form-control" id="name" name="name"
+										placeholder="Item Name" required autofocus />
+								</div>
+							</div>
+							<label class="control-label">Description</label>
+							<div>
+								<div class="input-group mb-4 mr-sm-4 mb-sm-2">
+									<input type="text" class="form-control" id="description"
+										name="description" placeholder="Description" autofocus />
+								</div>
+							</div>
+							<label class="control-label">Deadline</label>
+							<div>
+								<div class="input-group mb-4 mr-sm-4 mb-sm-2">
+									<input type="date" class="form-control" id="deadline"
+										name="deadline" required autofocus />
+								</div>
+							</div>
+							<label class="control-label">Owner List</label>
+							<div>
+								<div class="input-group mb-4 mr-sm-4 mb-sm-2">
+									<select class="selectpicker" name="ownerListId"
+										th:if="${toDoList != null}" required>
+										<th:block th:each="oneToDoList: ${toDoList}">
+											<option th:value="${oneToDoList.id}"
+												th:text="${oneToDoList.name}"></option>
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<div>
+								<button type="submit" class="btn btn-success">Create</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="deleteConfirmationModal" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<h4 class="modal-title w-100">Are you sure?</h4>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Do you really want to delete these To-Do List?</p>
+				</div>
+				<script th:inline="javascript">
+					/*<![CDATA[*/
+						var deleteListId;
+						function linkClickEvent(element) {
+						   deleteListId = $(element).closest("div").attr("id");
+						}
+						
+					/*]]>*/
+				</script>
+				<div class="modal-footer justify-content-center">
+					<form action="#" th:method="delete" th:action="@{/todo-list/delete/ + deleteListId}" >
+						<button type="button" class="btn btn-secondary"
+							data-dismiss="modal">Cancel</button>
+						<button type="button" class="btn btn-danger">Delete</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
