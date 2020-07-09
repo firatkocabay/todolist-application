@@ -195,7 +195,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\" : \"Test User\",\r\n    \"email\" : \"kocabay@test.com\",\r\n    \"password\" : \"test\"\r\n}",
+					"raw": "{\r\n    \"name\" : \"Test To Do List\",\r\n    \"mail\" : \"Kocabay@test.com\",\r\n    \"password\" : \"$2a$10$kWICiR4K01rwpqEiRHJbRu6fVJ5Benrveh7ngxIjfFlnlK3MQoJCu\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -203,7 +203,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:4444/api/user/create",
+					"raw": "http://localhost:4444/api/registration",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -211,8 +211,7 @@
 					"port": "4444",
 					"path": [
 						"api",
-						"user",
-						"create"
+						"registration"
 					]
 				}
 			},

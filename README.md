@@ -16,3 +16,8 @@ SpringBoot To-Do List Application
  * H2 DB
  * Maven
  * Thymeleaf
+
+### Test
+  Test user informations:
+  * Email: test@test.test
+  * Password: test
